@@ -1,4 +1,4 @@
-package com.github.yseto-icd.detektcustomrules
+package com.sodatsu.detekt
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -11,7 +11,7 @@ class MyRuleSetProvider : RuleSetProvider {
         return RuleSet(
             ruleSetId,
             listOf(
-                MyRule(config),
+                MyBatisSqlInjectableRule(config),
             ),
         )
     }
