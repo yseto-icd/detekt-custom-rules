@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.util.isAnnotated
 
 class MyBatisSqlInjectableRule(config: Config) : Rule(config) {
@@ -19,10 +20,10 @@ class MyBatisSqlInjectableRule(config: Config) : Rule(config) {
     )
     private val mybatisAnnotations = setOf("Insert", "Select")
 
-    override fun visitClass(klass: KtClass) {
-        super.visitClass(klass)
-        if (klass.isAnnotated && sqlInjectableMybatisAnnotation(klass)) {
-            report(CodeSmell(issue, Entity.atName(klass),
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
+        if (function.isAnnotated && sqlInjectableMybatisAnnotation(function)) {
+            report(CodeSmell(issue, Entity.atName(function),
                 """
                     SQL injectable with dollar substitution in MyBatis.
                     Avoid to use dollar substitution or
@@ -31,8 +32,8 @@ class MyBatisSqlInjectableRule(config: Config) : Rule(config) {
         }
     }
     private val quote = "\""
-    private fun sqlInjectableMybatisAnnotation(klass: KtClass): Boolean {
-        return klass.annotationEntries
+    private fun sqlInjectableMybatisAnnotation(function: KtNamedFunction): Boolean {
+        return function.annotationEntries
             .find { it.typeReference?.text in mybatisAnnotations }
             ?.run {
                 valueArguments

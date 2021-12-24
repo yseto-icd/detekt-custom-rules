@@ -29,7 +29,7 @@ internal class MyBatisSqlInjectableSpec {
                     ${dollar}{updated_at}
                 )
             ${quote}${quote}${quote})
-        interface A 
+        fun A()
         """
         val findings = MyBatisSqlInjectableRule(Config.empty).compileAndLintWithContext(env, code)
         println(findings)
@@ -50,7 +50,7 @@ internal class MyBatisSqlInjectableSpec {
                     hoge = ${dollar}{hoge}
                 )
             ${quote}${quote}${quote})
-        interface A 
+        fun A()
         """
         val findings = MyBatisSqlInjectableRule(Config.empty).compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
@@ -99,7 +99,7 @@ internal class MyBatisSqlInjectableSpec {
     fun `doesn't report not mybatis`() {
         val code = """
         @Test("${dollar}{}")
-        interface A
+        fun A()
         """
         val findings = MyBatisSqlInjectableRule(Config.empty).compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()

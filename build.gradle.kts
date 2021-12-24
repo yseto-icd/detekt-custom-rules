@@ -1,12 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.21"
-    `maven-publish`
+		kotlin("jvm") version "1.6.0"
+		`maven-publish`
 }
 
 group = "com.github.yseto-icd.detektcustomrules"
 version = "1.0-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -21,7 +22,10 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
+	kotlinOptions {
+		freeCompilerArgs = listOf("-Xjsr305=strict")
+		jvmTarget = "17"
+	}
 }
 
 tasks.withType<Test>().configureEach {
